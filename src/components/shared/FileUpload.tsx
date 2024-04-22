@@ -5,7 +5,7 @@ import { useMutation } from "@tanstack/react-query";
 import { Inbox, Loader2 } from "lucide-react";
 import { useDropzone } from "react-dropzone";
 import axios from "axios";
-import toast from "react-hot-toast";
+import {toast} from "sonner";
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 
@@ -20,7 +20,7 @@ const FileUpload = () => {
       file_key: string;
       file_name: string;
     }) => {
-      const response = await axios.post("/api/create-chat", {
+      const response = await axios.post("/api/document-chat", {
         file_key,
         file_name,
       });

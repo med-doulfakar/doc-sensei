@@ -4,8 +4,9 @@ import PDFViewer from "@/components/PDFViewer";
 import { db } from "@/lib/db";
 import { chats } from "@/lib/db/schema";
 import { auth } from "@clerk/nextjs";
+import axios from "axios";
 import { eq } from "drizzle-orm";
-import { redirect, useRouter } from "next/navigation";
+import { redirect } from "next/navigation";
 
 interface Props {
   params: {
@@ -24,30 +25,32 @@ const ChatPage = async ({ params: { chatId } }: Props) => {
     .from(chats)
     .where(eq(chats.userId, userId));
 
-
   if (!savedChats) {
     return redirect("/");
   }
-  if (!savedChats.find((c) => c.id === parseInt(chatId))) {
+  if (!savedChats.find((c) => c.id === chatId)) {
     return redirect("/");
   }
 
-  const currentChat = savedChats.find((chat) => chat.id === parseInt(chatId));
+  const currentChat = savedChats.find((chat) => chat.id === chatId);
 
   return (
-    <div className="flex w-full max-h-screen overflow-scroll">
+    <div className="flex w-full max-h-screen overflow-hidden">
       <div className="flex w-full max-h-screen overflow-auto">
         {/* chat sidebar */}
         <div className="flex-[1] max-w-xs">
-          <ChatSidebar chats={savedChats} chatId={parseInt(chatId)} />
+          <ChatSidebar
+            chats={savedChats}
+            chatId={chatId}
+          />
         </div>
         {/* pdf viewer */}
-        <div className="max-h-screen p-4 oveflow-auto flex-[5]">
+        {/* <div className="max-h-screen p-4 oveflow-auto flex-[5]">
           <PDFViewer pdfUrl={currentChat?.pdfUrl} />
-        </div>
+        </div> */}
         {/* chat component */}
         <div className="flex-[3] max-h-screen border-l-4 border-l-slate-200 overflow-auto">
-          <ChatComponent chatId={parseInt(chatId)} />
+          <ChatComponent chatId={chatId} />
         </div>
       </div>
     </div>

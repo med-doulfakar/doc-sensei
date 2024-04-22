@@ -1,4 +1,4 @@
-import { PutObjectCommandOutput, S3 } from "@aws-sdk/client-s3";
+import { DeleteObjectCommandOutput, PutObjectCommandOutput, S3 } from "@aws-sdk/client-s3";
 
 export async function uploadToS3(
   file: File
@@ -30,6 +30,34 @@ export async function uploadToS3(
           });
         }
       );
+    } catch (error) {
+      reject(error);
+    }
+  });
+}
+
+export async function deleteFromS3(file_key: string) {
+  return new Promise((resolve, reject) => {
+    try {
+      const s3 = new S3({
+        region: "us-east-1",
+        credentials: {
+          accessKeyId: process.env.NEXT_PUBLIC_AWS_ACCESS_KEY!,
+          secretAccessKey: process.env.NEXT_PUBLIC_AWS_SECRET_ACCESS_KEY!,
+        },
+      });
+
+      const params = {
+        Bucket: process.env.NEXT_PUBLIC_S3_BUCKET_NAME!,
+        Key: file_key,
+      };
+
+      s3.deleteObject(params ,  (err: any, data: DeleteObjectCommandOutput | undefined) => {
+        return resolve({
+          file_key
+        });
+      })
+
     } catch (error) {
       reject(error);
     }

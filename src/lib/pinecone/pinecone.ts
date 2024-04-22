@@ -90,3 +90,14 @@ async function prepareDocument(page: PDFPage) {
   ]);
   return docs;
 }
+
+export async function deleteVectorsFromPinecone(file_key: string) {
+  try {
+    const client = await getPineconeClient();
+    const pineconeIndex = await client.index("doc-sensei");
+
+    await pineconeIndex.namespace(convertToAscii(file_key)).deleteAll();
+  } catch (error) {
+    throw error;
+  }
+}

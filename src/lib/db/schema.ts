@@ -13,7 +13,7 @@ export const userSystemEnum = pgEnum("user_system_enum", ["system", "user"]);
 
 //tables
 export const chats = pgTable("chats", {
-  id: serial("id").primaryKey(),
+  id: text("id").primaryKey(),
   pdfName: text("pdf_name").notNull(),
   pdfUrl: text("pdf_url").notNull(),
   createdAt: timestamp("created_at").notNull().defaultNow(),
@@ -24,8 +24,8 @@ export type DocChat = typeof chats.$inferSelect;
 
 export const messages = pgTable("messages", {
   id: serial("id").primaryKey(),
-  chatId: integer("chat_id")
-    .references(() => chats.id)
+  chatId: text("chat_id")
+    .references(() => chats.id , {onDelete : 'cascade'})
     .notNull(),
   content: text("content").notNull(),
   createdAt: timestamp("created_at").notNull().defaultNow(),
