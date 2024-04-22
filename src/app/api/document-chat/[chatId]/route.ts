@@ -30,3 +30,23 @@ export async function DELETE(
     return new NextResponse("Internal Server Error", { status: 500 });
   }
 }
+
+export async function GET(
+  req: NextApiRequest,
+  { params }: { params: { chatId: string } }
+) {
+  try {
+    const { userId } = await auth();
+    const { chatId } = params;
+    if (!userId) return new NextResponse("Unauthorized", { status: 401 });
+    if (!chatId) return new NextResponse("Chat ID missing", { status: 400 });
+
+    const chat = await db.select().from(chats).where(eq(chats.id, chatId));
+    if (!chat) return new NextResponse("Chat doesn't exist", { status: 400 });
+
+    return NextResponse.json(chat);
+  } catch (error) {
+    console.error("[CHAT DELETE]", error);
+    return new NextResponse("Internal Server Error", { status: 500 });
+  }
+}

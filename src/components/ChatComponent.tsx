@@ -8,12 +8,15 @@ import { useEffect } from "react";
 import { useQuery } from "@tanstack/react-query";
 import axios from "axios";
 import { Message } from "ai";
+import { useModal } from "@/hooks/use-modal";
 
 interface ChatComponentProps {
   chatId: string;
 }
 
 const ChatComponent = ({ chatId }: ChatComponentProps) => {
+  const { onOpen } = useModal();
+
   const { data, isPending } = useQuery({
     queryKey: ["chat", chatId],
     queryFn: async () => {
@@ -42,6 +45,10 @@ const ChatComponent = ({ chatId }: ChatComponentProps) => {
   }, [messages]);
 
 
+  const handleViewDocument = () => {
+    console.log('openin view document modal')
+    onOpen("viewDocument" , {chatId  })
+  }
   return (
     <div
       className="relative h-full overflow-y-auto"
@@ -50,7 +57,7 @@ const ChatComponent = ({ chatId }: ChatComponentProps) => {
       <div className="sticky top-0 inset-x-0 p-2 h-fit flex items-center bg-gradient-to-r from-red-50 to-rose-300">
         <h3 className="text-xl font-bold ">Chat</h3>
         <div className="flex-1"></div>
-        <Button>
+        <Button onClick={() => handleViewDocument()}>
           View document
         </Button>
       </div>
