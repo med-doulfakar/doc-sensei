@@ -7,8 +7,9 @@ import { MessageCircle, PlusCircle, Trash } from "lucide-react";
 import { cn } from "@/lib/utils";
 import axios from "axios";
 import { useState } from "react";
-import {toast} from "sonner";
+import { toast } from "sonner";
 import { useRouter } from "next/navigation";
+import { useModal } from "@/hooks/use-modal";
 
 interface ChatSidebarProps {
   chats: DocChat[];
@@ -16,22 +17,13 @@ interface ChatSidebarProps {
 }
 
 const ChatSidebar = ({ chats, chatId }: ChatSidebarProps) => {
+  const { onOpen } = useModal();
   const [loading, setLoading] = useState(false);
-  const router = useRouter()
+  const router = useRouter();
 
   const onDelete = async (event: React.MouseEvent, chat_id: string) => {
     event.preventDefault();
-    try {
-      console.log(chat_id)
-      setLoading(true);
-      await axios.delete(`/api/document-chat/${chat_id}`);
-      toast.success("Chat deleted successfully" , {duration : 2000});
-      router.push('/')
-    } catch (error) {
-      console.log(error);
-    } finally {
-      setLoading(false);
-    }
+    onOpen("confirmation" , {chatId})
   };
 
   return (

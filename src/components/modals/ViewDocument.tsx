@@ -27,7 +27,7 @@ export const ViewDocumentModal = () => {
 
   return (
     <Dialog open={isModalOpen} onOpenChange={handleClose} >
-      <DialogContent className="bg-white text-black p-0 overflow-hidden max-h-full w-11/12">
+      <DialogContent className="bg-white text-black p-0 overflow-hidden min-w-full h-[600px]">
         <DialogHeader className="pt-8 px-6">
           <DialogTitle className="text-sm text-center font-bold">
             {chatId}
