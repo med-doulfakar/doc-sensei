@@ -46,7 +46,6 @@ const ChatComponent = ({ chatId }: ChatComponentProps) => {
 
 
   const handleViewDocument = () => {
-    console.log('openin view document modal')
     onOpen("viewDocument" , {chatId  })
   }
   return (

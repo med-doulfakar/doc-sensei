@@ -13,7 +13,7 @@ import { useModal } from "@/hooks/use-modal";
 
 interface ChatSidebarProps {
   chats: DocChat[];
-  chatId: string;
+  chatId?: string;
 }
 
 const ChatSidebar = ({ chats, chatId }: ChatSidebarProps) => {
@@ -23,7 +23,7 @@ const ChatSidebar = ({ chats, chatId }: ChatSidebarProps) => {
 
   const onDelete = async (event: React.MouseEvent, chat_id: string) => {
     event.preventDefault();
-    onOpen("confirmation" , {chatId})
+    onOpen("confirmation" , {chatId : chat_id})
   };
 
   return (

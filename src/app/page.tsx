@@ -7,7 +7,10 @@ import { UserButton, auth } from "@clerk/nextjs";
 import { eq } from "drizzle-orm";
 import { LogIn } from "lucide-react";
 import Link from "next/link";
-import { toast } from "sonner";
+import { Monoton } from "next/font/google";
+import { cn } from "@/lib/utils";
+
+const headerFont = Monoton({ weight: "400", subsets: ["latin"] });
 
 export default async function Home() {
   const { userId } = await auth();
@@ -22,14 +25,25 @@ export default async function Home() {
     <div>
       <div className="sticky top-0 left-0 w-full bg-white text-slate-800 p-4">
         <div className="flex flex-row gap-2 items-center">
-          <h1 className="">Document Sensei</h1>
+          <h1
+            className={cn(
+              headerFont.className,
+              "text-2xl font-extrabold bg-gradient-to-r from-blue-600 via-green-500 to-indigo-400 inline-block text-transparent bg-clip-text"
+            )}
+          >
+            DOCUMENT SENSEI
+          </h1>
           <div className="flex-1"></div>
           <Link
-            href="/"
-            className="text-slate-800 text-sm mr-4 p-2 hover:bg-slate-700 hover:text-slate-100 rounded-sm"
+            href="/chat"
+            className="text-slate-800 text-sm mr-4 p-2 hover:bg-slate-700 hover:text-slate-100 rounded-sm "
           >
             Chats
-            {savedChats.length > 0 && <Badge variant="default" className="ml-2">{savedChats.length}</Badge>}
+            {savedChats.length > 0 && (
+              <Badge variant="default" className="ml-2">
+                {savedChats.length}
+              </Badge>
+            )}
           </Link>
           <UserButton afterSignOutUrl="/" />
         </div>

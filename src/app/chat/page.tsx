@@ -8,13 +8,8 @@ import axios from "axios";
 import { eq } from "drizzle-orm";
 import { redirect } from "next/navigation";
 
-interface Props {
-  params: {
-    chatId: string;
-  };
-}
 
-const ChatPage = async ({ params: { chatId } }: Props) => {
+const MainChatPage = async () => {
   const { userId } = await auth();
   if (!userId) {
     return redirect("/sign-in");
@@ -29,7 +24,6 @@ const ChatPage = async ({ params: { chatId } }: Props) => {
     return redirect("/");
   }
 
-  const currentChat = savedChats.find((chat) => chat.id === chatId);
 
   return (
     <div className="flex w-full max-h-screen overflow-hidden">
@@ -38,7 +32,7 @@ const ChatPage = async ({ params: { chatId } }: Props) => {
         <div className="flex-[1] max-w-xs">
           <ChatSidebar
             chats={savedChats}
-            chatId={chatId}
+            chatId={null}
           />
         </div>
         {/* pdf viewer */}
@@ -47,11 +41,10 @@ const ChatPage = async ({ params: { chatId } }: Props) => {
         </div> */}
         {/* chat component */}
         <div className="flex-[3] max-h-screen border-l-4 border-l-slate-200 overflow-auto">
-          <ChatComponent chatId={chatId} />
         </div>
       </div>
     </div>
   );
 };
 
-export default ChatPage;
+export default MainChatPage;

@@ -31,7 +31,7 @@ const DeleteChatModal = () => {
       await axios.delete(`/api/document-chat/${chatId}`);
       toast.success("Chat deleted successfully", { duration: 2000 });
       onClose();
-      router.push("/");
+      router.push("/chat");
     } catch (error) {
       console.log(error);
     } finally {
