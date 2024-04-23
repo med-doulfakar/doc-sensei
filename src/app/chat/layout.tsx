@@ -6,6 +6,7 @@ import { eq } from "drizzle-orm";
 import { Badge } from "@/components/ui/badge";
 import { Monoton } from "next/font/google";
 import { cn } from "@/lib/utils";
+import { currentProfile } from "@/lib/db/current-profile";
 
 const headerFont = Monoton({ weight: "400", subsets: ["latin"] });
 
@@ -16,13 +17,13 @@ const ChatLayout = async ({
   children: React.ReactNode;
 }>) => {
 
-  const { userId } = await auth();
+  const user = await currentProfile();
 
 
   const savedChats = await db
     .select()
     .from(chats)
-    .where(eq(chats.userId, userId));
+    .where(eq(chats.userId, user?.id));
 
   return (
     <div>

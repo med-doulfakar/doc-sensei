@@ -2,24 +2,29 @@ import FileUpload from "@/components/shared/FileUpload";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { db } from "@/lib/db";
-import { chats } from "@/lib/db/schema";
+import { DocUser, chats } from "@/lib/db/schema";
 import { UserButton, auth } from "@clerk/nextjs";
 import { eq } from "drizzle-orm";
 import { LogIn } from "lucide-react";
 import Link from "next/link";
 import { Monoton } from "next/font/google";
 import { cn } from "@/lib/utils";
+import { initialProfile } from "@/lib/db/initial-profile";
+import { redirect } from "next/navigation";
 
 const headerFont = Monoton({ weight: "400", subsets: ["latin"] });
 
 export default async function Home() {
-  const { userId } = await auth();
-  const isAuth = !!userId;
+  const user  : DocUser= await initialProfile();
+  const isAuth = !!user;
+  const savedChats = []
 
-  const savedChats = await db
+  if(user) {
+    await db
     .select()
     .from(chats)
-    .where(eq(chats.userId, userId));
+    .where(eq(chats.userId, user.id));
+  }
 
   return (
     <div>

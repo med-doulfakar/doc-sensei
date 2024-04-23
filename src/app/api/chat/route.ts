@@ -55,14 +55,14 @@ export async function POST(req: Request) {
         });
       },
       onCompletion: async (completion) => {
-        const processedContent = await remark()
+        /* const processedContent = await remark()
           .use(html)
           .process(completion);
-        const contentHtml = processedContent.toString();
+        const contentHtml = processedContent.toString(); */
         await db.insert(ChatMessages).values({
           chatId,
           role: "system",
-          content: contentHtml,
+          content: completion,
         });
 
       },

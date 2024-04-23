@@ -2,6 +2,7 @@ import ChatComponent from "@/components/ChatComponent";
 import ChatSidebar from "@/components/ChatSidebar";
 import PDFViewer from "@/components/PDFViewer";
 import { db } from "@/lib/db";
+import { currentProfile } from "@/lib/db/current-profile";
 import { chats } from "@/lib/db/schema";
 import { auth } from "@clerk/nextjs";
 import axios from "axios";
@@ -10,15 +11,16 @@ import { redirect } from "next/navigation";
 
 
 const MainChatPage = async () => {
-  const { userId } = await auth();
-  if (!userId) {
+  const user = await currentProfile();
+
+  if (!user) {
     return redirect("/sign-in");
   }
 
   const savedChats = await db
     .select()
     .from(chats)
-    .where(eq(chats.userId, userId));
+    .where(eq(chats.userId, user.id));
 
   if (!savedChats) {
     return redirect("/");

@@ -2,6 +2,7 @@ import ChatComponent from "@/components/ChatComponent";
 import ChatSidebar from "@/components/ChatSidebar";
 import PDFViewer from "@/components/PDFViewer";
 import { db } from "@/lib/db";
+import { currentProfile } from "@/lib/db/current-profile";
 import { chats } from "@/lib/db/schema";
 import { auth } from "@clerk/nextjs";
 import axios from "axios";
@@ -15,21 +16,19 @@ interface Props {
 }
 
 const ChatPage = async ({ params: { chatId } }: Props) => {
-  const { userId } = await auth();
-  if (!userId) {
+  const user = await currentProfile()
+  if (!user) {
     return redirect("/sign-in");
   }
 
   const savedChats = await db
     .select()
     .from(chats)
-    .where(eq(chats.userId, userId));
+    .where(eq(chats.userId, user?.id));
 
   if (!savedChats) {
     return redirect("/");
   }
-
-  const currentChat = savedChats.find((chat) => chat.id === chatId);
 
   return (
     <div className="flex w-full max-h-screen overflow-hidden">
@@ -47,7 +46,7 @@ const ChatPage = async ({ params: { chatId } }: Props) => {
         </div> */}
         {/* chat component */}
         <div className="flex-[3] max-h-screen border-l-4 border-l-slate-200 overflow-auto">
-          <ChatComponent chatId={chatId} />
+          <ChatComponent chatId={chatId} user={user}/>
         </div>
       </div>
     </div>

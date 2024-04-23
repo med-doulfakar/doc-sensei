@@ -2,13 +2,16 @@ import { cn } from "@/lib/utils";
 import { Message } from "ai/react";
 import { Loader2 } from "lucide-react";
 import EmptyMessageList from "./EmptyMessageList";
+import Image from "next/image";
+import SenseiLogo from "../../public/imgs/sensei-logo.png";
 
 interface MessageListProps {
   messages: Message[];
   isPending: boolean;
+  userImg?: string;
 }
 
-const MessageList = ({ messages, isPending }: MessageListProps) => {
+const MessageList = ({ messages, isPending, userImg }: MessageListProps) => {
   if (!messages) return <></>;
 
   if (isPending)
@@ -27,22 +30,24 @@ const MessageList = ({ messages, isPending }: MessageListProps) => {
             <div
               key={message.id}
               className={cn("flex", {
-                "justify-end pl-10": message.role === "user",
-                "justify-start pr-10": message.role === "assistant",
+                " flex-row-reverse pl-10 ": message.role === "user",
+                " justify-start pr-10": message.role === "assistant",
               })}
             >
-              <div
-                className={cn(
-                  "rounded-lg px-3 text-sm py-1 shadow-md ring-1 ring-gray-900/10",
-                  {
-                    "bg-blue-600 text-white": message.role === "user",
-                    "bg-green-600 text-white": ["system", "assistant"].includes(
-                      message.role
-                    ),
-                  }
-                )}
-              >
-                <div dangerouslySetInnerHTML={{ __html: message.content }} />
+              <Image
+                src={message?.role === "user" ? userImg : SenseiLogo}
+                alt="user profile iamge"
+                width={30}
+                height={30}
+                className={cn("rounded-full  w-8 h-8", {
+                  "mr-2": ["assistant", "system"].includes(message?.role),
+                  "ml-2": message?.role === "user",
+                })}
+              />
+              <div className="rounded-lg px-3 text-sm py-1 shadow-md ring-1 ring-gray-900/10 bg-slate-500 text-white">
+                <pre className="overflow-x-auto whitespace-pre-wrap">
+                  {message.content}
+                </pre>
               </div>
             </div>
           );

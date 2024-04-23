@@ -1,5 +1,6 @@
 import { getS3Url } from "@/lib/aws/s3";
 import { db } from "@/lib/db";
+import { currentProfile } from "@/lib/db/current-profile";
 import { chats } from "@/lib/db/schema";
 import { loadS3IntoPinecone } from "@/lib/pinecone/pinecone";
 import { auth } from "@clerk/nextjs";
@@ -7,8 +8,8 @@ import { NextResponse } from "next/server";
 import { v4 as uuidv4 } from "uuid";
 
 export async function POST(req: Request, res: Response) {
-  const { userId } = await auth();
-  if (!userId) {
+  const user = await currentProfile()
+  if (!user) {
     return NextResponse.json({ error: "unauthorized" }, { status: 401 });
   }
   try {
@@ -24,7 +25,7 @@ export async function POST(req: Request, res: Response) {
         fileKey: file_key,
         pdfName: file_name,
         pdfUrl: getS3Url(file_key),
-        userId,
+        userId : user?.id
       })
       .returning({
         insertedId: chats.id,

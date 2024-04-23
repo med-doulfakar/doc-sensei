@@ -9,20 +9,21 @@ import { useQuery } from "@tanstack/react-query";
 import axios from "axios";
 import { Message } from "ai";
 import { useModal } from "@/hooks/use-modal";
+import { DocUser } from "@/lib/db/schema";
 
 interface ChatComponentProps {
   chatId: string;
+  user : DocUser;
 }
 
-const ChatComponent = ({ chatId }: ChatComponentProps) => {
+const ChatComponent = ({ chatId , user }: ChatComponentProps) => {
+
   const { onOpen } = useModal();
 
   const { data, isPending } = useQuery({
     queryKey: ["chat", chatId],
     queryFn: async () => {
-      const response = await axios.post<Message[]>(
-        `/api/messages`, { chatId }
-      );
+      const response = await axios.post<Message[]>(`/api/messages`, { chatId });
       return response.data;
     },
   });
@@ -44,24 +45,18 @@ const ChatComponent = ({ chatId }: ChatComponentProps) => {
     }
   }, [messages]);
 
-
   const handleViewDocument = () => {
-    onOpen("viewDocument" , {chatId  })
-  }
+    onOpen("viewDocument", { chatId });
+  };
   return (
-    <div
-      className="relative h-full overflow-y-auto"
-      id="messages-container"
-    >
-      <div className="sticky top-0 inset-x-0 p-2 h-fit flex items-center bg-gradient-to-r from-red-50 to-rose-300">
+    <div className="relative h-full overflow-y-auto" id="messages-container">
+      <div className="sticky top-0 inset-x-0 p-2 h-fit flex items-center">
         <h3 className="text-xl font-bold ">Chat</h3>
         <div className="flex-1"></div>
-        <Button onClick={() => handleViewDocument()}>
-          View document
-        </Button>
+        <Button onClick={() => handleViewDocument()}>View document</Button>
       </div>
 
-      <MessageList messages={messages} isPending={isPending}/>
+      <MessageList messages={messages} isPending={isPending} userImg={user.imageUrl}/>
 
       <form
         onSubmit={handleSubmit}
