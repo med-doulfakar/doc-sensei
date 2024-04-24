@@ -1,5 +1,5 @@
 "use client";
-import { Send } from "lucide-react";
+import { EllipsisVertical, Eye, Send, Trash } from "lucide-react";
 import { Input } from "./ui/input";
 import { useChat } from "ai/react";
 import { Button } from "./ui/button";
@@ -10,16 +10,23 @@ import axios from "axios";
 import { Message } from "ai";
 import { useModal } from "@/hooks/use-modal";
 import { DocUser } from "@/lib/db/schema";
+import {
+  DropdownMenu,
+  DropdownMenuCheckboxItem,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuLabel,
+  DropdownMenuSeparator,
+  DropdownMenuTrigger,
+} from "./ui/dropdown-menu";
+import { ChatHeader } from "./ChatHeader";
 
 interface ChatComponentProps {
   chatId: string;
-  user : DocUser;
+  user: DocUser;
 }
 
-const ChatComponent = ({ chatId , user }: ChatComponentProps) => {
-
-  const { onOpen } = useModal();
-
+const ChatComponent = ({ chatId, user }: ChatComponentProps) => {
   const { data, isPending } = useQuery({
     queryKey: ["chat", chatId],
     queryFn: async () => {
@@ -45,18 +52,15 @@ const ChatComponent = ({ chatId , user }: ChatComponentProps) => {
     }
   }, [messages]);
 
-  const handleViewDocument = () => {
-    onOpen("viewDocument", { chatId });
-  };
   return (
     <div className="relative h-full overflow-y-auto" id="messages-container">
-      <div className="sticky top-0 inset-x-0 p-2 h-fit flex items-center">
-        <h3 className="text-xl font-bold ">Chat</h3>
-        <div className="flex-1"></div>
-        <Button onClick={() => handleViewDocument()}>View document</Button>
-      </div>
+      <ChatHeader chatId={chatId} />
 
-      <MessageList messages={messages} isPending={isPending} userImg={user.imageUrl}/>
+      <MessageList
+        messages={messages}
+        isPending={isPending}
+        userImg={user.imageUrl}
+      />
 
       <form
         onSubmit={handleSubmit}

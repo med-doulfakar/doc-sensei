@@ -1,10 +1,11 @@
 import { DocChat } from "@/lib/db/schema";
 import { create } from "zustand";
 
-export type ModalType = "viewDocument" | "confirmation";
+export type ModalType = "viewDocument" | "confirmation" | "newChat";
 
 interface ModalData {
   chatId?: string;
+  userId?: number;
 }
 interface ModalStore {
   type: ModalType | null;

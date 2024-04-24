@@ -9,7 +9,11 @@ import {toast} from "sonner";
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 
-const FileUpload = () => {
+interface FileUploadProps {
+  onSuccess : () => {}
+}
+
+const FileUpload = ({onSuccess} : FileUploadProps) => {
   const router = useRouter();
   const [uploading, setUploading] = useState(false);
   const { mutate, isPending } = useMutation({
@@ -49,8 +53,10 @@ const FileUpload = () => {
 
         mutate(data, {
           onSuccess: ({ chat_id }) => {
-            toast.success("Chat created successfully");
+            onSuccess()
             router.push("/chat/" + chat_id);
+            toast.success("Chat created successfully");
+            
           },
           onError: (err) => {
             toast.error("Error creating chat with uploaded document");

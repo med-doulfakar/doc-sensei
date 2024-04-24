@@ -1,6 +1,6 @@
 "use client";
 
-import { DocChat } from "@/lib/db/schema";
+import { DocChat, DocUser } from "@/lib/db/schema";
 import Link from "next/link";
 import { Button } from "./ui/button";
 import { MessageCircle, PlusCircle, Trash } from "lucide-react";
@@ -14,6 +14,7 @@ import { useModal } from "@/hooks/use-modal";
 interface ChatSidebarProps {
   chats: DocChat[];
   chatId?: string;
+  user: DocUser
 }
 
 const ChatSidebar = ({ chats, chatId }: ChatSidebarProps) => {
@@ -26,14 +27,17 @@ const ChatSidebar = ({ chats, chatId }: ChatSidebarProps) => {
     onOpen("confirmation" , {chatId : chat_id})
   };
 
+  const openNewChat = (event: React.MouseEvent, ) => {
+    event.preventDefault();
+    onOpen('newChat' )
+  }
+
   return (
     <div className="w-full h-screen p-4 text-ray-200 bg-gray-900">
-      <Link href="/">
-        <Button className="w-full border-dashed border-white border">
+        <Button className="w-full border-dashed border-white border" onClick={($event) => openNewChat($event)}>
           <PlusCircle className="mr-2 w-4 h-4 " />
           New chat
         </Button>
-      </Link>
 
       <div className="flex flex-col gap-2 mt-4">
         {chats.map((chat) => {
