@@ -53,31 +53,34 @@ const ChatComponent = ({ chatId, user }: ChatComponentProps) => {
   }, [messages]);
 
   return (
-    <div className="relative h-full overflow-y-auto" id="messages-container">
-      <ChatHeader chatId={chatId} />
+    <div className="relative top-0 left-0 max-h-screen " id="messages-container">
+      <div className="flex flex-col justify-between">
+        <ChatHeader chatId={chatId} />
 
-      <MessageList
-        messages={messages}
-        isPending={isPending}
-        userImg={user.imageUrl}
-      />
+        <MessageList
+          messages={messages}
+          isPending={isPending}
+          userImg={user.imageUrl}
+        />
 
-      <form
-        onSubmit={handleSubmit}
-        className="sticky bottom-0 inset-x-0 px-2 py-4 bg-white"
-      >
-        <div className="flex">
-          <Input
-            value={input}
-            onChange={handleInputChange}
-            placeholder="Ask an question ..."
-            className="w-full"
-          />
-          <Button className="bg-blue-600 ml-2">
-            <Send className="h-4 w-4" />
-          </Button>
-        </div>
-      </form>
+
+        <form
+          onSubmit={handleSubmit}
+          className="sticky bottom-0 inset-x-0 px-2 py-4 bg-white"
+        >
+          <div className="flex">
+            <Input
+              value={input}
+              onChange={handleInputChange}
+              placeholder="Ask anything ..."
+              className="w-full"
+            />
+            <Button className="bg-blue-600 ml-2">
+              <Send className="h-4 w-4" />
+            </Button>
+          </div>
+        </form>
+      </div>
     </div>
   );
 };

@@ -21,7 +21,7 @@ const MessageList = ({ messages, isPending, userImg }: MessageListProps) => {
       </div>
     );
   return (
-    <div className="flex flex-col gap-2 px-4 pt-4">
+    <div className="flex flex-col gap-2 px-4 pt-4 overflow-y-scroll">
       {messages.length === 0 ? (
         <EmptyMessageList />
       ) : (

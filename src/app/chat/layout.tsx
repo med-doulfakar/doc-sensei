@@ -26,7 +26,7 @@ const ChatLayout = async ({
     .where(eq(chats.userId, user?.id));
 
   return (
-    <div>
+    <div className="h-screen w-screen overflow-hidden">
       <div className="sticky top-0 left-0 w-full bg-white text-slate-800 p-4 border-b-2 border-slate-300 z-10">
         <div className="flex flex-row gap-2 items-center">
         <h1

@@ -20,6 +20,7 @@ export async function POST(req: Request) {
     const { messages, chatId } = await req.json();
     const lastMessage = messages[messages.length - 1];
     const _chats = await db.select().from(Chats).where(eq(Chats.id, chatId));
+    
     if (_chats.length != 1)
       return NextResponse.json({ error: "Chat not found" }, { status: 404 });
     const context = await getContext(lastMessage.content, _chats[0]?.fileKey);
@@ -55,10 +56,7 @@ export async function POST(req: Request) {
         });
       },
       onCompletion: async (completion) => {
-        /* const processedContent = await remark()
-          .use(html)
-          .process(completion);
-        const contentHtml = processedContent.toString(); */
+        
         await db.insert(ChatMessages).values({
           chatId,
           role: "system",

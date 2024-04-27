@@ -57,10 +57,6 @@ const ChatSidebar = ({ chats, chatId }: ChatSidebarProps) => {
                   {chat.pdfName}
                 </p>
 
-                <Trash
-                  className="w-5 h-5 hidden group-hover:block text-red-600"
-                  onClick={($event) => onDelete($event, chat.id)}
-                />
               </div>
             </Link>
           );
